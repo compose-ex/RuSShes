@@ -33,7 +33,6 @@ type Rss2 struct {
 
 // Item describes the items within the feed
 type Item struct {
-	// Required
 	Title       string        `xml:"title" json:"title"`
 	Link        string        `xml:"link" json:"link"`
 	Description template.HTML `xml:"description" json:"description"`
@@ -50,17 +49,15 @@ func main() {
 
 	r := Rss2{}
 
-	fmt.Println(*feedurl)
-
 	response, err := http.DefaultClient.Get(*feedurl)
-
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	xmlContent, err := ioutil.ReadAll(response.Body)
 	err = xml.Unmarshal(xmlContent, &r)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	client := elastigo.NewConn()
